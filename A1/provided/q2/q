@@ -1,0 +1,12 @@
+#!/bin/bash
+
+for word in $(cat $1); do
+echo Description for test case ${word}:
+location="$word.desc"
+if [ -f $location ]; then
+echo $(cat $location)
+else 
+echo No test description
+fi
+
+done
