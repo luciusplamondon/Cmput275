@@ -5,7 +5,7 @@ for word in $(cat $2); do
     out=$word.out
     cmdin=$(${1} < ${in})
     if [ "$cmdin" = "$(cat $out)" ]; then
-        echo test $word passed
+        echo Test $word passed
     else
         echo Test $word failed
         echo Expected output: 
