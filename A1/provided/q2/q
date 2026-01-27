@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ $# -ne 1 ]; then
-    echo fail
+    echo Segmentation fault
     exit 1
 fi
 
@@ -12,6 +12,6 @@ for word in $(cat $1); do
     if [ -f $location ]; then
         echo $(cat $location)
     else 
-        echo No test description
+        echo ${word}: No test description
     fi
 done
