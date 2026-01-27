@@ -1,12 +1,17 @@
 #!/bin/bash
 
-for word in $(cat $1); do
-echo Description for test case ${word}:
-location="$word.desc"
-if [ -f $location ]; then
-echo $(cat $location)
-else 
-echo No test description
+if [ $# -ne 1 ]; then
+    echo fail
+    exit 1
 fi
 
+
+for word in $(cat $1); do
+    echo Description for test case ${word}:
+    location="$word.desc"
+    if [ -f $location ]; then
+        echo $(cat $location)
+    else 
+        echo No test description
+    fi
 done
