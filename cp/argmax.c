@@ -1,8 +1,7 @@
 #include <stdio.h>
 
 int argmax(int arr[], unsigned int size) {
-    int x;
-    x = *arr;
+    int x = *arr;
     while (size > 0) {
         if (x < *arr) {
             x = *arr;
