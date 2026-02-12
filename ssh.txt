@@ -1,2 +1,2 @@
 ssh lgplamon@ohaton.cs.ualberta.ca
-git pull 'https://github.com/luciusplamondon/Cmput275.git/'
+git push 'https://github.com/luciusplamondon/Cmput275.git/'
