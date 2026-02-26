@@ -94,4 +94,8 @@ int main(int argc, char const *argv[]){
     if (s) sepia(pic, width, height);
 
     print(pic, width, height);
+    for (int i = 0; i < height; i++) {
+        free(pic[i]);
+    free(pic);
+}
 }
