@@ -126,9 +126,9 @@ int main(int argc, char const *argv[]){
             scanf(" %c", &x); // we need to check three variables now
             scanf(" %c", &y);
             scanf(" %c", &z);
-            if ( x < 'a' && x > 'd' ) {printf("Invalid SString target %c\n", x); break;} // checking if var in x, y, z are valid
-            else if ( y < 'a' && y > 'd' ) {printf("Invalid SString target %c\n", y); break;}
-            else if ( z < 'a' && z > 'd' ) {printf("Invalid SString target %c\n", z); break;}
+            if ( x < 'a' || x > 'd' ) {printf("Invalid SString target %c\n", x); break;} // checking if var in x, y, z are valid
+            else if ( y < 'a' || y > 'd' ) {printf("Invalid SString target %c\n", y); break;}
+            else if ( z < 'a' || z > 'd' ) {printf("Invalid SString target %c\n", z); break;}
             else concadenate(&var[x-'a'], &sizes[x-'a'], &caps[x-'a'], var[y-'a'], sizes[y-'a'], var[z-'a'], sizes[z-'a']);//little to many variable imo lmao
         }
     
