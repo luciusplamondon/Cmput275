@@ -1,15 +1,27 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-int main(int argc, char **argv) {
-  int x = 10;
-  int arr[5] = {0,1,2,3,4};
-  for (int i; i < 5; ++i){
-  printf("%d\n",arr[i]);
-  }
-  for (int i; i<5; ++i){
-   arr[i] = arr[i]*2;
-  }
-  for (int i; i < 5; ++i){
-  printf("%d\n",arr[i]);
+struct stuff{
+    int x, y, z;
+};
+
+void mutate(struct stuff *p){
+    p->x +=2;
+    p->y +=3;
 }
+
+void mutatebad(struct stuff p){
+    p.x +=2;
+    p.y +=3;
+}
+int main(int argc, char const *argv[])
+{
+    struct stuff r;
+    r.x = 1;
+    r.y = 3;
+    printf("x %d, y %d\n", r.x, r.y);
+    mutate(&r);
+    printf("x %d, y %d\n", r.x, r.y);
+    mutatebad(r);
+    printf("x %d, y %d\n", r.x, r.y);
 }
