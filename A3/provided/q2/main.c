@@ -13,45 +13,6 @@
  * After reading all commands from the user your 
  * destroyMaze function is then called to clean up the maze.
 */
-struct Maze {
-    char **grid;
-    int width;
-    int height;
-    struct Pos player;
-    struct Pos start;
-};
-
-
-
-void reset(struct Maze *m) { //reset the maze by simply setting the player to the start
-    m->player = m->start;
-}
-
-void printMaze(struct Maze *m) {
-    for (int i = 0; i < m->width + 2; i++) printf("="); //first line, print "="*width +2 because of the boarder
-    printf("\n");
-
-    for (int r = 0; r < m->height; r++) { //print each row
-        printf("|"); // border
-        for (int c = 0; c < m->width; c++) {// print each collon in that row
-            if (r == m->player.y && c == m->player.x) printf("P"); //if the player is in that location, print P instead
-            else printf("%c", m->grid[r][c]);// else, print the grid value at [r][c]
-        }
-        printf("|\n");
-    }
-
-    for (int i = 0; i < m->width + 2; i++) printf("=");// last line, print "="*width +2 because of the boarder
-    printf("\n");
-}
-struct Maze *destroyMaze(struct Maze *m) {
-    if (m) { //if maze is empty, do nothing
-        for (int i = 0; i < m->height; i++) { //free each row one by one
-            free(m->grid[i]);
-        }
-        free(m->grid);
-        free(m);
-    }
-}
 
 int whitespace(char c) {
   return c == ' ' || c == '\n' || c == '\n' || c == '\r';
