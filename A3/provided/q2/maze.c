@@ -9,22 +9,36 @@ struct Maze {
     struct Pos player;
     struct Pos start;
 };
+char **growGrid(char **oldGrid, int currentHeight) {
+    // Allocate a NEW block for Grid
+    char **newGrid = malloc(sizeof(char *) * (currentHeight + 1));
+    //  Copy the addresses from the old list to the new list
+    for (int i = 0; i < currentHeight; i++) {
+        newGrid[i] = oldGrid[i];
+    }
+    // Free the OLD Grid
+    free(oldGrid);
+    return newGrid;
+}
 
-struct Maze *readMaze() { //bug, when size is altered, everything else is alter must fix!!!!!!!
+struct Maze *readMaze() { 
     struct Maze *m = malloc(sizeof(struct Maze));
     m->grid = NULL;
     m->height = 0;
     m->width = 0;
 
-    char buffer[2001]; //according to the sample, max length is 2001
+    char buffer[2005];
     int startCount = 0;
     int goalCount = 0;
 
-    while (scanf("%s", buffer) == 1) {
+    while (scanf("%2000s", buffer) == 1) {//according to the sample, max length is 2001
         int len = strlen(buffer);
-        m->width = len;
+        if (len > m->width) {
+            m->width = len; 
+        }
 
-        m->grid = realloc(m->grid, sizeof(char *) * (m->height + 1)); //implement dynamically growing array !!!!!!
+        char **temp = growGrid(m->grid, m->height); // increase grid size
+        m->grid = temp; // place new grid into the maze
         m->grid[m->height] = malloc(len + 1); //allocate meory for the next line
         strcpy(m->grid[m->height], buffer);// copy the input value to the grid
 
@@ -46,12 +60,12 @@ struct Maze *readMaze() { //bug, when size is altered, everything else is alter 
             }
         }
         m->height++;//increment height
-
-        int ch = getchar(); 
-        if (ch == '\n' || ch == '\r') {//since scanf skip whitespace, we have to check if /n is done twice
+        int extra;
+        while ((extra = getchar()) != EOF && extra != '\n' && extra != '\r' && extra != ' ');
+        if (extra == '\n' || extra == '\r') {//since scanf skip whitespace, we have to check if /n is done twice
             int nextC = getchar();
             if (nextC == '\n' || nextC == '\r') break;
-            ungetc(nextC, stdin); //find a way to not use this !!!!!!
+            ungetc(nextC, stdin); //if not \n then return in to input string
         }
     }
 
@@ -138,19 +152,32 @@ void reset(struct Maze *m) { //reset the maze by simply setting the player to th
 }
 
 void printMaze(struct Maze *m) {
-    for (int i = 0; i < m->width + 2; i++) printf("="); //first line, print "="*width +2 because of the boarder
+    if (m->height == 0) return;
+
+    //Top Border
+    int firstRowLen = (int)strlen(m->grid[0]);
+    for (int i = 0; i < firstRowLen + 2; i++) printf("=");
     printf("\n");
 
-    for (int r = 0; r < m->height; r++) { //print each row
-        printf("|"); // border
-        for (int c = 0; c < m->width; c++) {// print each collon in that row
-            if (r == m->player.y && c == m->player.x) printf("P"); //if the player is in that location, print P instead
-            else printf("%c", m->grid[r][c]);// else, print the grid value at [r][c]
+    //Print Rows
+    for (int r = 0; r < m->height; r++) {
+        printf("|"); // Left border
+        
+        int currentRowLen = (int)strlen(m->grid[r]);
+        for (int c = 0; c < currentRowLen; c++) {
+            if (r == m->player.y && c == m->player.x) {
+                printf("P");
+            } else {
+                printf("%c", m->grid[r][c]);
+            }
         }
-        printf("|\n");
+        
+        printf("|\n"); // Right border
     }
 
-    for (int i = 0; i < m->width + 2; i++) printf("=");// last line, print "="*width +2 because of the boarder
+    // 3. Bottom Border
+    int lastRowLen = (int)strlen(m->grid[m->height - 1]);
+    for (int i = 0; i < lastRowLen + 2; i++) printf("=");
     printf("\n");
 }
 struct Maze *destroyMaze(struct Maze *m) {
@@ -162,69 +189,4 @@ struct Maze *destroyMaze(struct Maze *m) {
         free(m);
     }
     return NULL;
-}
-// ************************************************************************************************************************************** DELETE AFTER USE
-int whitespace(char c) {
-  return c == ' ' || c == '\n' || c == '\n' || c == '\r';
-}
-
-char getNext() {
-  char c = getchar();
-  for (; whitespace(c); c = getchar());
-  return c;
-}
-
-int main() {
-  struct Maze *m = readMaze();
-  if (m == NULL) {
-    printf("Malformed maze.\n");
-    return 0;
-  }
-  printf("Finished reading maze, enter commands\n");
-  char cmd;
-  char target;
-  int done = 0;
-  int win = 0;
-  while (!done && !feof(stdin)) {
-    cmd = getNext();
-    if (cmd == EOF) break; // breaks loop
-    switch (cmd) {
-      case 'p':
-        printMaze(m);
-        break; // breaks switch
-      case 'q':
-        done = 1;
-        break; // breaks switch
-      case 'm':
-        target = getNext();
-        if (target == EOF) {
-          done = 1;
-          break; // breaks switch
-        }
-        if (target != 'n' && target != 'e' && target != 's' && target != 'w') {
-          printf("Invalid move target: %c\n", target);
-        } else {
-          struct Pos p = makeMove(m, target);
-          if (p.x == -1 && p.y == -1) {
-            done = 1;
-            win = 1;
-          }
-        }
-        break;
-      case 'r':
-        reset(m);
-        break;
-      default:
-        printf("Incorrect command: %c\n", cmd);
-        break;
-    }
-  }
-  if (win) {
-    printf("Congrats you made it to the end of the maze!\n");
-    printMaze(m);
-  }
-  m = destroyMaze(m);
-  if (m != NULL) {
-    printf("Error, your destroyMaze doesn't return NULL\n");
-  }
 }
