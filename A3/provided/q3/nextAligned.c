@@ -1,7 +1,14 @@
 #include <stdio.h>
-
+#include <string.h>
 void *nextAlignedAddress(void *faddr, size_t size) {
-  // TODO
+  unsigned long long d = (unsigned long long)faddr; //convert hex to decimal
+  printf("%llu\n",d);
+  while (1){
+    if (d%size == 0) break; //check if divible by size, if not increment d until it does
+    d = d+1;
+  }
+  printf("%llu\n",d);
+  return (void*)d;
 }
 
 
