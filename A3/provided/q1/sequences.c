@@ -14,7 +14,7 @@ Operation* create_operation(char* t, int o) {
     Operation* new_node = (Operation*)malloc(sizeof(Operation));
     if (new_node == NULL) { //check if we can allocate the memory
         printf("Memory allocation failed\n");
-        return 1;
+        return NULL;
     }
     strcpy(new_node->type, t);
     new_node->operand = o;
